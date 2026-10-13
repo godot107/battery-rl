@@ -33,7 +33,7 @@ source .venv/bin/activate          # own venv, CPU torch
 pytest -q                          # 8 tests
 python -m battery_rl fetch         # ~75 s per year
 python -m battery_rl baselines --split val
-python -m battery_rl train --run ppo-s42 --seed 42      # ~1M steps on CPU
+python -m battery_rl train --run ppo-s42 --seed 42 --timesteps 2000000   # ~6 min, 1 thread
 python -m battery_rl eval ppo-s42 --split val          # test only once, at the end
 ```
 
@@ -45,3 +45,6 @@ python -m battery_rl eval ppo-s42 --split val          # test only once, at the 
   `config.json`, and loading is strict.
 - **Rewards in dollars (scaled 1/100), not clipped:** clipping would change the objective. Observations are
   signed-log squashed because prices reach $5,000.
+- **One thread per run:** `rl.train` sets `torch.set_num_threads(1)`. Three seeds in parallel with default
+  threads oversubscribed 12 cores and ran ~5x slower. Use `PYTHONUNBUFFERED=1` when logging to a file.
+- **Test touched once (2025-10-13 run):** PPO 41-50% of perfect foresight vs forecast+LP 46%; see README.

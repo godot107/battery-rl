@@ -45,6 +45,7 @@ def train(train_prices, val_prices, run="ppo", seed=config.SEED, **overrides):
     from stable_baselines3.common.env_util import make_vec_env
     hp = {**HP, **overrides}
     torch.manual_seed(seed)
+    torch.set_num_threads(1)        # a 128x128 MLP gains nothing from threads; parallel seeds otherwise thrash
     vec = make_vec_env(lambda: env.BatteryEnv(train_prices, hp["episode_hours"]), n_envs=hp["n_envs"], seed=seed)
     model = _ppo(vec, hp, seed)
     best, history, t0 = -np.inf, [], time.time()
