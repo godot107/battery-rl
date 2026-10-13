@@ -47,4 +47,4 @@ python -m battery_rl eval ppo-s42 --split val          # test only once, at the 
   signed-log squashed because prices reach $5,000.
 - **One thread per run:** `rl.train` sets `torch.set_num_threads(1)`. Three seeds in parallel with default
   threads oversubscribed 12 cores and ran ~5x slower. Use `PYTHONUNBUFFERED=1` when logging to a file.
-- **Test touched once (2025-10-13 run):** PPO 41-50% of perfect foresight vs forecast+LP 46%; see README.
+- **Test touched once (2026-10-13 run):** PPO 41-50% of perfect foresight vs forecast+LP 46%; see README.
